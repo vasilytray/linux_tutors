@@ -1,4 +1,4 @@
 # linux_tutors
 short Linux spangles
 
-[консольная утилита-мультиплексор](/blob/tmux.md)
+[консольная утилита-мультиплексор](/tmux.md)

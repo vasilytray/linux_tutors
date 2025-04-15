@@ -5,4 +5,4 @@ short Linux spangles
 
 2. Настройка сети ВМ в Virtual-Box для подключения VisualStudio Code к ВМ по SSH протоколу.
 
-[Настройка сети ВМ в Virtual-Box](/virtual-box-settings.md)
+- [Настройка сети ВМ в Virtual-Box](/virtual-box-settings.md)

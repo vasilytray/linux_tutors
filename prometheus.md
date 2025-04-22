@@ -113,8 +113,7 @@ docker stop grafana
 apt  install docker-compose
 ```
 
-### Установка Prometheus + Node Exporter
-
+### Установка Prometheus + Node Exporter 
 Установим Prometheus и для сбора статистики с хост системы(системы на которой установлен сервер Grafana) дополнительно установим Node Exporter.
 
 Для упрощения установки мы создадим в дирректории ``/prometeus`` в которой будет располагаться файл конфигурации **prometheus.yml** файл **docker-compose.yml** следующим содержимым:
@@ -196,3 +195,64 @@ docker-compose up -d
 ```sh
 docker-compose down && sudo docker-compose up -d
 ```
+
+### Запуск контейнера Grafana в docker-compose
+
+Чтобы запустить последнюю стабильную версию Grafana с помощью Docker Compose, выполните следующие действия:
+
+1. Создайте docker-compose.yamlфайл.
+
+```sh
+# first go into the directory where you have created this docker-compose.yaml file
+cd /grafana # /path/to/docker-compose-directory
+
+# now create the docker-compose.yaml file
+touch docker-compose.yaml
+```
+
+2. Добавьте следующий код в **docker-compose.yaml** файл.
+
+```yaml
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+volumes:
+  grafana-storage: {}
+```
+
+3. Сохраните файл и выполните следующую команду:
+
+```sh
+docker-compose up -d
+```
+
+## Настройка панели мониторинга Grafana
+
+### Вход в Grafana
+Чтобы войти в Grafana в первый раз:
+
+1. Откройте веб-браузер и перейдите по адресу http://localhost:3000/.
+
+2. По умолчанию Grafana прослушивает HTTP-порт, 3000 если вы не настроили другой порт.
+
+3. На странице входа введите **admin** имя пользователя и пароль.
+
+4. Нажмите «Войти» .
+
+    В случае успеха вы увидите предложение сменить пароль.
+
+5. Нажмите «ОК» в появившемся окне и измените свой пароль.
+
+> Примечание
+>
+> Мы настоятельно рекомендуем вам изменить пароль администратора по умолчанию.
+
+[Подробнее как подключить панели мониторинга из готовых шаблонов](https://grafana.com/docs/grafana/latest/getting-started/build-first-dashboard/)
+
+Для хоста рекомендую панель номер 1860 или 20763

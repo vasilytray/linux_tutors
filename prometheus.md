@@ -229,7 +229,7 @@ volumes:
 3. Сохраните файл и выполните следующую команду:
 
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Настройка панели мониторинга Grafana

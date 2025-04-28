@@ -106,19 +106,80 @@ docker ps
 
 При подключении к базам локально достаточно в сервисе подключаться к **localhost:5432**
 
-Подключиться по SSH к серверу, на котором работает PostgreSQL, можно стандартными способами, но важно понимать, что SSH и PostgreSQL — это разные протоколы.
+Если PostgreSQL запущен в Docker-контейнере, есть несколько способов подключиться к нему:
 
-#### 1. Подключение к серверу через SSH
-Если у вас есть доступ к серверу через SSH, используйте команду:
+#### 1.Подключение через psql внутри контейнера
+Если вам нужно просто выполнить SQL-запросы, можно зайти прямо в контейнер и использовать psql:
 ```sh
-ssh -p number_ssh_port username@server_ip_or_hostname
+docker exec -it <container_name_or_id> psql -U <postgres_user> -d <database_name>
 ```
 
-- number_ssh_port - ssh-порт, если он не стандартный 22.
-- username — ваше имя пользователя на сервере.
-- server_ip_or_hostname — IP-адрес или доменное имя сервера.
+Если нужно войти в контейнер и потом запустить psql:
+```bash
+docker exec -it postgres_container bash
+psql -U postgres -d mydb
+```
 
-#### 2. Подключение к PostgreSQL после входа на сервер
-После подключения по SSH вы можете работать с PostgreSQL:
+#### 2. Подключение с локальной машины (если порт проброшен)
+При запуске контейнера PostgreSQL обычно пробрасывают порт (5432 по умолчанию):
+Например если постгрес был запущен docker-ом:
+```sh
+docker run --name postgres_container -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+```
+или как описано выше, то порты уже проброшены и подключиться к ним локально можно следующим образом:
+```sh
+psql -h localhost -p 5432 -U postgres -d postgres
+```
+Параметры:
+* -h localhost — хост (если Docker на локальной машине).
+* -p 5432 — порт (который проброшен в docker run).
+* -U postgres — пользователь PostgreSQL.
+* -d postgres — база данных (по умолчанию postgres).
 
-Вариант 1: Через psql (консольный клиент PostgreSQL)
+#### 3. Подключение из другой сети Docker (если контейнеры в одной сети)
+Если PostgreSQL в одной Docker-сети с другим контейнером, можно подключиться по имени сервиса:
+
+```bash
+psql -h postgres_container -p 5432 -U postgres -d postgres
+```
+(Имя postgres_container должно быть указано в docker-compose.yml или при запуске docker run --name.)
+
+#### 4. Использование DBeaver, pgAdmin или другого GUI-клиента
+Если порт проброшен (-p 5432:5432), можно подключиться из графического клиента:
+* Хост: localhost
+* Порт: 5432
+* Пользователь: postgres (или другой, если создан)
+* Пароль: Указан в POSTGRES_PASSWORD
+
+### Возможные проблемы.
+
+1. Ошибка: "Connection refused"
+
+* Проверьте, что порт проброшен (-p 5432:5432).
+* Убедитесь, что контейнер запущен:
+
+```bash
+docker ps
+```
+
+2. Ошибка аутентификации
+
+* Проверьте POSTGRES_USER и POSTGRES_PASSWORD.
+* Если пароль не задан, попробуйте postgres (по умолчанию).
+
+3. PostgreSQL не слушает внешние подключения
+   
+Если в логах видно listen_addresses = 'localhost', нужно изменить postgresql.conf (внутри контейнера):
+
+```bash
+docker exec -it postgres_container bash
+echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
+exit
+docker restart postgres_container
+```
+
+### Если что-то не работает — проверьте логи PostgreSQL:
+
+```bash
+docker logs postgres_container
+```

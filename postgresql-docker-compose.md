@@ -117,7 +117,41 @@ docker exec -it <container_name_or_id> psql -U <postgres_user> -d <database_name
 Если нужно войти в контейнер и потом запустить psql:
 ```bash
 docker exec -it postgres_container bash
-psql -U postgres -d mydb
+psql -U postgres
+```
+
+Чтобы вывести список баз подключившись к контейнеру и фодя в psql
+```sh
+\l
+```
+Вывод:
+```sh
+                                  List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ usr1_db   | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+```
+
+или через SQL-запрос:
+
+```sql
+SELECT datname FROM pg_database;
+```
+Вывод:
+```sh
+  datname  
+-----------
+ postgres
+ template1
+ template0
+ mydb
+(4 rows)
 ```
 
 #### 2. Подключение с локальной машины (если порт проброшен)

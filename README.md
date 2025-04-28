@@ -11,3 +11,7 @@ short Linux spangles
 
 - [Запуск Prometheus + Grafana с использованием Docker](/prometheus.md)
 - [Запуск InfluxDB 2.0 и Telegraf с использованием Docker](/influxdb-telegraf-docker.md) - пока в разработке
+
+4. Базы данных.
+
+- [Быстрый запуск PostgrSQL с использованием Docker](/postgresql-docker-compose.md)

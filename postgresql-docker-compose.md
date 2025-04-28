@@ -148,10 +148,15 @@ SELECT datname FROM pg_database;
   datname  
 -----------
  postgres
+ usr1_db
  template1
  template0
- mydb
 (4 rows)
+```
+Дополнительные фильтры (если нужно исключить системные БД)
+```sh
+SELECT datname FROM pg_database 
+WHERE datname NOT IN ('template0', 'template1', 'postgres');
 ```
 
 #### 2. Подключение с локальной машины (если порт проброшен)

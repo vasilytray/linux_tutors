@@ -99,6 +99,8 @@ docker-compose up -d
 docker ps
 ```
 Запущенный контейре будет выглядеть так:
+![shell docker ps](/images/postgres_docker-compose.jpg)
+
 
 ### Подключение к серверу PostgreSQL
 

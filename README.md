@@ -15,3 +15,7 @@ short Linux spangles
 4. Базы данных.
 
 - [Быстрый запуск PostgrSQL с использованием Docker](/postgresql-docker-compose.md)
+
+5. Admin Linux-server.
+
+- [Если забит диск](/admin.md)

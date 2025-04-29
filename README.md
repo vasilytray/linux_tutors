@@ -18,4 +18,4 @@ short Linux spangles
 
 5. Admin Linux-server.
 
-- [Если забит диск](/admin.md)
+- [Если забит диск](/admin_linux_server.md)

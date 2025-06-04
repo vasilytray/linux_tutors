@@ -31,13 +31,13 @@ version: '3.9'
 
 volumes:
   ns2:
-  driver: local
+    driver: local
 
 services:
   postgres:
-    image: postgres:latest # Установим последнюю версию
-    container_name: postgres_my # Имя контейнера
-    environment: # зададим минимально-необходимые переменные
+    image: postgres:latest
+    container_name: postgres_my
+    environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: You-PoStgrSuser_password
       POSTGRES_DB: usr1_db
@@ -45,7 +45,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-        - ns2:/var/lib/postgresql/data
+      - ns2:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
@@ -63,7 +63,7 @@ services:
                -c wal_buffers=16MB
                -c default_statistics_target=100
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres_user -d postgres_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d usr1_db" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -90,7 +90,7 @@ services:
 ### Запуск PostgreSQL
 Чтобы развернуть PostgreSQL с помо0щью этого файла Docker Compose, выполним команду в каталоге с файлом docker-compose.yml:
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Проверка работы контейнера с POstgreSQL
